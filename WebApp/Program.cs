@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WebApp.Config;
 using WebApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var dbConfig = builder.Configuration.GetSection("TAI_Bakery").Get<Settings>();
+var connectionString = dbConfig.ConnectionString;
+
 builder.Services.AddDbContext<AppDBContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("TAI_BakeryDb"))
+    options => options.UseNpgsql(connectionString)
 );
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

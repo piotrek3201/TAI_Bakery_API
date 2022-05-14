@@ -6,7 +6,8 @@ using WebApp.Model;
 
 namespace WebApp.Controllers
 {
-    [Route("categories")]
+    [Route("/api/categories")]
+    [Tags("Categories")]
     [ApiController]
     public class CategoryContoller : ControllerBase
     {
@@ -20,7 +21,13 @@ namespace WebApp.Controllers
         [HttpGet("/all")]
         public async Task<ActionResult<IEnumerable<Category>>> Get()
         {
-            return await categoryRepository.GetCategoriesAsync();
+            return await categoryRepository.GetAllCategoriesAsync();
+        }
+
+        [HttpGet("/{id}")]
+        public async Task<Category> GetCategoryById(long id)
+        {
+            return await categoryRepository.GetCategoryByIdAsync(id);
         }
 
         [HttpPost("/add")]
@@ -28,6 +35,34 @@ namespace WebApp.Controllers
         {
             bool createSuccesful = await categoryRepository.AddCategoryAsync(category);
             if(createSuccesful)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("/update")]
+        public async Task<ActionResult> UpdateCategory(Category category)
+        {
+            bool updateSuccesful = await categoryRepository.UpdateCategoryAsync(category);
+            if(updateSuccesful)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete("/delete/{id}")]
+        public async Task<ActionResult> DeleteCategory(long id)
+        {
+            bool deleteSuccesful = await categoryRepository.DeleteCategoryAsync(id);
+            if(deleteSuccesful)
             {
                 return Ok();
             }
