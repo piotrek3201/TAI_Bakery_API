@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebApp.Model
 {
@@ -10,5 +12,9 @@ namespace WebApp.Model
         [Required]
         [MaxLength(20)]
         public string CategoryName { get; set; } = string.Empty;
+
+        //navigation property for EF Core
+        [JsonIgnore]
+        public List<Product>? Products { get; set;}
     }
 }

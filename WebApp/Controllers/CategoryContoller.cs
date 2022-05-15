@@ -6,9 +6,9 @@ using WebApp.Model;
 
 namespace WebApp.Controllers
 {
+    [ApiController]
     [Route("/api/categories")]
     [Tags("Categories")]
-    [ApiController]
     public class CategoryContoller : ControllerBase
     {
         private readonly ICategoryRepository categoryRepository;
@@ -18,19 +18,22 @@ namespace WebApp.Controllers
             this.categoryRepository = categoryRepository;
         }
 
-        [HttpGet("/all")]
+        //GET: api/categories/all
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Category>>> Get()
         {
             return await categoryRepository.GetAllCategoriesAsync();
         }
 
-        [HttpGet("/{id}")]
+        //GET: api/categories/{id}
+        [HttpGet("{id}")]
         public async Task<Category> GetCategoryById(long id)
         {
             return await categoryRepository.GetCategoryByIdAsync(id);
         }
 
-        [HttpPost("/add")]
+        //POST: api/categories/add
+        [HttpPost("add")]
         public async Task<ActionResult> AddCategory(Category category)
         {
             bool createSuccesful = await categoryRepository.AddCategoryAsync(category);
@@ -44,7 +47,8 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpPut("/update")]
+        //PUT: api/categories/update
+        [HttpPut("update")]
         public async Task<ActionResult> UpdateCategory(Category category)
         {
             bool updateSuccesful = await categoryRepository.UpdateCategoryAsync(category);
@@ -58,7 +62,8 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpDelete("/delete/{id}")]
+        //DELETE: api/categories/delete/{id}
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteCategory(long id)
         {
             bool deleteSuccesful = await categoryRepository.DeleteCategoryAsync(id);

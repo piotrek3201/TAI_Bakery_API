@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebApp.Model
 {
@@ -20,6 +22,12 @@ namespace WebApp.Model
         [Required]
         public bool IsByWeight { get; set; }
         [Required]
-        public bool IsCustomizable { get; set; }
+        public bool IsCustomizable { get; set; } = false;
+        [Required]
+        public string ImageUrl { get; set; } = string.Empty;
+
+        //navigation property for EF Core
+        [JsonIgnore]
+        public Category? Category { get; set; }
     }
 }
