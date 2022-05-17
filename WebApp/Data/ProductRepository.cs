@@ -48,12 +48,25 @@ namespace WebApp.Data
 
         public async Task<List<Product>> GetAllProductsAsync()
         {
-            return await db.Products.ToListAsync();
+            var products = await db.Products.ToListAsync();
+            if(products != null)
+            {
+                foreach(var product in products)
+                {
+                    product.Category = await db.Categories.FirstOrDefaultAsync(x => x.CategoryId == product.CategoryId);
+                }
+            }
+            return products;
         }
 
         public async Task<Product> GetProductByIdAsync(long id)
         {
-            return await db.Products.FirstOrDefaultAsync(x => x.ProductId == id);
+            var product = await db.Products.FirstOrDefaultAsync(x => x.ProductId == id);
+            if (product != null)
+            {
+                product.Category = await db.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
+            }
+            return product;
         }
 
         public async Task<bool> UpdateProductAsync(Product product)

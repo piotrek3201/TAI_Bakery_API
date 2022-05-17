@@ -18,7 +18,7 @@ namespace WebApp.Model
         [MaxLength(200)]
         public string Description { get; set; } = string.Empty;
         [Required]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         [Required]
         public bool IsByWeight { get; set; }
         [Required]
@@ -26,8 +26,10 @@ namespace WebApp.Model
         [Required]
         public string ImageUrl { get; set; } = string.Empty;
 
-        //navigation property for EF Core
-        [JsonIgnore]
+        //navigation properties for EF Core
+        //[JsonIgnore]
         public Category? Category { get; set; }
+        [JsonIgnore]
+        public List<OrderDetail>? OrderDetails { get; set; }
     }
 }
