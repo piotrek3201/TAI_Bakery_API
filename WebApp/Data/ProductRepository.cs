@@ -69,6 +69,19 @@ namespace WebApp.Data
             return product;
         }
 
+        public async Task<List<Product>> GetProductsByCategoryId(long categoryId)
+        {
+            var products = await db.Products.Where(x => x.CategoryId == categoryId).ToListAsync();
+            if (products != null)
+            {
+                foreach (var product in products)
+                {
+                    product.Category = await db.Categories.FirstOrDefaultAsync(x => x.CategoryId == product.CategoryId);
+                }
+            }
+            return products;
+        }
+
         public async Task<bool> UpdateProductAsync(Product product)
         {
             try

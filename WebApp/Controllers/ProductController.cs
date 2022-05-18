@@ -31,6 +31,13 @@ namespace WebApp.Controllers
             return await productRepository.GetProductByIdAsync(id);
         }
 
+        //GET: api/products?categoryId={categoryId}
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryId(long categoryId)
+        {
+            return await productRepository.GetProductsByCategoryId(categoryId);
+        }
+
         //POST: api/products/add
         [HttpPost("add")]
         public async Task<ActionResult> AddProduct(Product product)

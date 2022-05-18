@@ -9,5 +9,6 @@ namespace WebApp.Data
         Task<bool> AddProductAsync(Product product);
         Task<bool> UpdateProductAsync(Product product);
         Task<bool> DeleteProductAsync(long id);
+        Task<List<Product>> GetProductsByCategoryId(long categoryId);
     }
 }
