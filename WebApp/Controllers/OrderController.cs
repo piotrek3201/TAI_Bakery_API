@@ -44,5 +44,20 @@ namespace WebApp.Controllers
                 return BadRequest();
             }
         }
+
+        //DELETE: api/orders/delete/{id}
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> DeleteOrder(long id)
+        {
+            bool deleteSuccesful = await orderRepository.DeleteOrderAsync(id);
+            if (deleteSuccesful)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

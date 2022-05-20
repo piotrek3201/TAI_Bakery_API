@@ -8,13 +8,24 @@ namespace WebApp.Data
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
+           
+        }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Customization> Customizations { get; set; }
+        public DbSet<Size> Sizes { get; set; }
+        public DbSet<Addition> Additions { get; set; }
+        public DbSet<Cake> Cakes { get; set; }
+        public DbSet<Filling> Fillings { get; set; }
+        public DbSet<Glaze> Glazes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +44,37 @@ namespace WebApp.Data
                 .HasMany(p => p.OrderDetails)
                 .WithOne(od => od.Product)
                 .HasForeignKey(od => od.ProductId);
+
+            modelBuilder.Entity<Customization>()
+                .HasMany(c => c.OrderDetails)
+                .WithOne(od => od.Customization)
+                .HasForeignKey(od => od.CustomizationId);
+
+            modelBuilder.Entity<Addition>()
+                .HasMany(a => a.Customizations)
+                .WithOne(c => c.Addition)
+                .HasForeignKey(c => c.AdditionId);
+
+            modelBuilder.Entity<Cake>()
+                .HasMany(ca => ca.Customizations)
+                .WithOne(cu => cu.Cake)
+                .HasForeignKey(c => c.CakeId);
+
+            modelBuilder.Entity<Filling>()
+                .HasMany(f => f.Customizations)
+                .WithOne(c => c.Filling)
+                .HasForeignKey(c => c.FillingId);
+
+            modelBuilder.Entity<Glaze>()
+                .HasMany(g => g.Customizations)
+                .WithOne(c => c.Glaze)
+                .HasForeignKey(c => c.GlazeId);
+
+            modelBuilder.Entity<Size>()
+                .HasMany(s => s.Customizations)
+                .WithOne(c => c.Size)
+                .HasForeignKey(c => c.SizeId);
+
 
             modelBuilder.Entity<Category>().HasData(
                 new Category()
@@ -100,6 +142,101 @@ namespace WebApp.Data
                 }
             );
 
+            modelBuilder.Entity<Size>().HasData(
+                new Size()
+                {
+                    SizeId = 1,
+                    Diameter = 20
+                },
+                new Size()
+                {
+                    SizeId = 2,
+                    Diameter = 30
+                },
+                new Size()
+                {
+                    SizeId = 3,
+                    Diameter = 45
+                }
+            );
+
+            modelBuilder.Entity<Cake>().HasData(
+                new Cake()
+                {
+                    CakeId = 1,
+                    CakeName = "Śmietankowe",
+                    CakeColor = "#FFFF99"
+                },
+                new Cake()
+                { 
+                    CakeId = 2,
+                    CakeName = "Waniliowe",
+                    CakeColor = "#FDE456"
+                },
+                new Cake()
+                {
+                    CakeId = 3,
+                    CakeName = "Czekoladowe",
+                    CakeColor = "#AC7A33"
+                }
+            );
+
+            modelBuilder.Entity<Filling>().HasData(
+                new Filling()
+                {
+                    FillingId = 1,
+                    FillingName = "Kremowe",
+                    FillingColor = "#FFFDD0"
+                },
+                new Filling()
+                {
+                    FillingId = 2,
+                    FillingName = "Czekoladowe",
+                    FillingColor = "#7B3F00"
+                },
+                new Filling()
+                {
+                    FillingId = 3,
+                    FillingName = "Truskawkowe",
+                    FillingColor = "#CF2942"
+                },
+                new Filling()
+                {
+                    FillingId = 4,
+                    FillingName = "Malinowe",
+                    FillingColor = "#DC143C"
+                }
+            );
+
+            modelBuilder.Entity<Glaze>().HasData(
+                new Glaze()
+                {
+                    GlazeId = 1,
+                    GlazeName = "Śmietankowa",
+                    GlazeColor = "#FFFFF0"
+                },
+                new Glaze()
+                {
+                    GlazeId = 2,
+                    GlazeName = "Czekoladowa",
+                    GlazeColor = "#7B3F00"
+                },
+                new Glaze()
+                {
+                    GlazeId = 3,
+                    GlazeName = "Truskawkowa",
+                    GlazeColor = "#F5ACCB"
+                }
+            );
+
+            modelBuilder.Entity<Addition>().HasData(
+                new Addition()
+                {
+                    AdditionId = 1,
+                    AdditionName = "Owoce"
+                }
+            );
+
             modelBuilder.Entity<Order>().HasData(
                 new Order
                 {
@@ -107,7 +244,10 @@ namespace WebApp.Data
                     CustomerEmail = "piotrek3201@onet.pl",
                     CustomerName = "Piotr Kałuziński",
                     CustomerPhone = "+48501171851",
+                    CustomerAddress = "Aleja Jana Pawła II 21/37",
+                    CustomerPostalCode = "00-213",
                     Date = DateTime.Now,
+                    DeliveryDate = DateTime.Now.AddDays(2),
                     OrderValue = 50M
                 },
                 new Order
@@ -116,8 +256,25 @@ namespace WebApp.Data
                     CustomerEmail = "jan.kowalski@gmail.com",
                     CustomerName = "Jan Kowalski",
                     CustomerPhone = "+48501355704",
+                    CustomerAddress = "Długa 10",
+                    CustomerPostalCode = "02-137",
                     Date = DateTime.Now,
+                    DeliveryDate= DateTime.Now.AddDays(4),
                     OrderValue = 20M
+                }
+            );
+
+            modelBuilder.Entity<Customization>().HasData(
+                new Customization()
+                {
+                    CustomizationId = 1,
+                    //OrderDetailId = 1,
+                    SizeId = 3,
+                    GlazeId = 1,
+                    FillingId = 2,
+                    CakeId = 1,
+                    AdditionId = 1,
+                    Text = "100 lat!"
                 }
             );
 
@@ -128,7 +285,8 @@ namespace WebApp.Data
                     OrderId = 1,
                     ProductId = 1,
                     Quantity = 0.5,
-                    Price = 8.5M
+                    Price = 8.5M,
+                    CustomizationId = 1
                 },
                 new OrderDetail
                 {
@@ -136,7 +294,8 @@ namespace WebApp.Data
                     OrderId = 1,
                     ProductId = 3,
                     Quantity = 2,
-                    Price = 40M
+                    Price = 40M,
+                    
                 },
                 new OrderDetail
                 {
@@ -155,6 +314,8 @@ namespace WebApp.Data
                     Price = 4.75M
                 }
             );
+
+            
         }
     }
 }

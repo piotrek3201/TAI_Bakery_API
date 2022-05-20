@@ -25,6 +25,20 @@ namespace WebApp.Data
                 foreach(var orderDetail in orderDetails)
                 {
                     orderDetail.Product = await db.Products.FirstOrDefaultAsync(x => x.ProductId == orderDetail.ProductId);
+                    if(orderDetail.Product != null && orderDetail.Product.IsCustomizable)
+                    {
+                        orderDetail.Customization = await db.Customizations.FirstOrDefaultAsync(x => x.CustomizationId == orderDetail.CustomizationId);
+                        
+                        if(orderDetail.Customization != null)
+                        {
+                            orderDetail.Customization.Cake = await db.Cakes.FirstOrDefaultAsync(x => x.CakeId == orderDetail.Customization.CakeId);
+                            orderDetail.Customization.Filling = await db.Fillings.FirstOrDefaultAsync(x => x.FillingId == orderDetail.Customization.FillingId);
+                            orderDetail.Customization.Glaze = await db.Glazes.FirstOrDefaultAsync(x => x.GlazeId == orderDetail.Customization.GlazeId);
+                            orderDetail.Customization.Size = await db.Sizes.FirstOrDefaultAsync(x => x.SizeId == orderDetail.Customization.SizeId);
+                            orderDetail.Customization.Addition = await db.Additions.FirstOrDefaultAsync(x => x.AdditionId == orderDetail.Customization.AdditionId);
+                        }
+                        
+                    }
                 }
             }
             return orderDetails;
@@ -65,7 +79,21 @@ namespace WebApp.Data
                     {
                         orderDetail.OrderId = maxId + 1;
                         if(orderDetail.Product != null)
+                        {
                             orderDetail.Price = orderDetail.Product.Price * (decimal)orderDetail.Quantity;
+
+                            var orderDetailMaxId = await db.OrderDetails.MaxAsync(x => x.OrderDetailId);
+                            //orderDetail.OrderDetailId = orderDetailMaxId + 1;
+
+                            if(orderDetail.Product.IsCustomizable && orderDetail.Customization != null)
+                            {
+                                //orderDetail.Customization.OrderDetailId = orderDetailMaxId + 1;
+                                var customizationMaxId = await db.Customizations.MaxAsync(x => x.CustomizationId);
+                                orderDetail.CustomizationId = customizationMaxId + 1;
+                                await db.Customizations.AddAsync(orderDetail.Customization);
+                            }
+                        }
+
                         await db.OrderDetails.AddAsync(orderDetail);
                     }
                 }
@@ -73,7 +101,8 @@ namespace WebApp.Data
                 return await db.SaveChangesAsync() >= 1;
             }
             catch (Exception ex)
-            {
+            { 
+                throw ex;
                 return false;
             }
         }
@@ -86,6 +115,21 @@ namespace WebApp.Data
                 order.OrderDetails = await GetOrderDetailsAsync(orderId);
             }
             return order;
+        }
+
+        public async Task<bool> DeleteOrderAsync(long orderId)
+        {
+            try
+            {
+                var orderToDelete = await GetOrderByIdAsync(orderId);
+                db.Orders.Remove(orderToDelete);
+                return await db.SaveChangesAsync() >= 1;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
         }
     }
 }

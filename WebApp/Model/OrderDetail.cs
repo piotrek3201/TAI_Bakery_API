@@ -16,11 +16,12 @@ namespace WebApp.Model
         public double Quantity { get; set; }
         [Required]
         public decimal Price { get; set; }
+        public long? CustomizationId { get; set; }
 
         //navigation properties for EF Core:
         [JsonIgnore]
         public Order? Order { get; set; }
-        //[JsonIgnore]
         public Product? Product { get; set; }
+        public Customization? Customization { get; set; }
     }
 }
