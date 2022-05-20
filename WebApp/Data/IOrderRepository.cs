@@ -8,6 +8,7 @@ namespace WebApp.Data
         Task<List<OrderDetail>> GetOrderDetailsAsync(long orderId);
         Task<Order> GetOrderByIdAsync(long orderId);
         Task<bool> AddOrderAsync(Order order);
+        Task<bool> UpdateOrderAsync(Order order);
         Task<bool> DeleteOrderAsync(long orderId);
     }
 }

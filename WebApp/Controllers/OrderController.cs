@@ -45,6 +45,21 @@ namespace WebApp.Controllers
             }
         }
 
+        //PUT: api/orders/update
+        [HttpPut("update")]
+        public async Task<ActionResult> UpdateOrder(Order order)
+        {
+            bool updateSuccesful = await orderRepository.UpdateOrderAsync(order);
+            if (updateSuccesful)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         //DELETE: api/orders/delete/{id}
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult> DeleteOrder(long id)

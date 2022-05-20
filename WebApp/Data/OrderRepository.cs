@@ -83,11 +83,9 @@ namespace WebApp.Data
                             orderDetail.Price = orderDetail.Product.Price * (decimal)orderDetail.Quantity;
 
                             var orderDetailMaxId = await db.OrderDetails.MaxAsync(x => x.OrderDetailId);
-                            //orderDetail.OrderDetailId = orderDetailMaxId + 1;
 
                             if(orderDetail.Product.IsCustomizable && orderDetail.Customization != null)
                             {
-                                //orderDetail.Customization.OrderDetailId = orderDetailMaxId + 1;
                                 var customizationMaxId = await db.Customizations.MaxAsync(x => x.CustomizationId);
                                 orderDetail.CustomizationId = customizationMaxId + 1;
                                 await db.Customizations.AddAsync(orderDetail.Customization);
@@ -130,6 +128,19 @@ namespace WebApp.Data
                 return false;
             }
             
+        }
+
+        public async Task<bool> UpdateOrderAsync(Order order)
+        {
+            try
+            {
+                db.Orders.Update(order);
+                return await db.SaveChangesAsync() >= 1;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
