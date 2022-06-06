@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApp.Migrations
 {
-    public partial class testdatabase : Migration
+    public partial class FinalDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -94,7 +94,8 @@ namespace WebApp.Migrations
                     Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     OrderValue = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsFinished = table.Column<bool>(type: "boolean", nullable: false)
+                    IsFinished = table.Column<bool>(type: "boolean", nullable: false),
+                    SelfPickUp = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,6 +113,22 @@ namespace WebApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sizes", x => x.SizeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -271,11 +288,11 @@ namespace WebApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Orders",
-                columns: new[] { "OrderId", "CustomerAddress", "CustomerCity", "CustomerEmail", "CustomerName", "CustomerPhone", "CustomerPostalCode", "Date", "DeliveryDate", "IsFinished", "OrderValue" },
+                columns: new[] { "OrderId", "CustomerAddress", "CustomerCity", "CustomerEmail", "CustomerName", "CustomerPhone", "CustomerPostalCode", "Date", "DeliveryDate", "IsFinished", "OrderValue", "SelfPickUp" },
                 values: new object[,]
                 {
-                    { 1L, "Aleja Jana Pawła II 21/37", "", "piotrek3201@onet.pl", "Piotr Kałuziński", "+48501171851", "00-213", new DateTime(2022, 5, 19, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5673), new DateTime(2022, 5, 21, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5675), false, 50m },
-                    { 2L, "Długa 10", "", "jan.kowalski@gmail.com", "Jan Kowalski", "+48501355704", "02-137", new DateTime(2022, 5, 19, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5680), new DateTime(2022, 5, 23, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5681), false, 20m }
+                    { 1L, "Aleja Jana Pawła II 21/37", "", "piotrek3201@onet.pl", "Piotr Kałuziński", "+48501171851", "00-213", new DateTime(2022, 6, 6, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3656), new DateTime(2022, 6, 8, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3657), false, 50m, false },
+                    { 2L, "Długa 10", "", "jan.kowalski@gmail.com", "Jan Kowalski", "+48501355704", "02-137", new DateTime(2022, 6, 6, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3668), new DateTime(2022, 6, 10, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3669), false, 20m, false }
                 });
 
             migrationBuilder.InsertData(
@@ -359,12 +376,21 @@ namespace WebApp.Migrations
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "OrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Customizations");

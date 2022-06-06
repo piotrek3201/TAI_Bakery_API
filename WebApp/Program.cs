@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApp.Config;
 using WebApp.Data;
+using WebApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +10,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORSPolicy", builder =>
     {
-        builder.AllowAnyMethod()
+        builder.WithOrigins("http://localhost:3000")
+        .AllowAnyMethod()
         .AllowAnyHeader()
-        .WithOrigins("http://localhost:3000");
+        .AllowCredentials();
     });
 });
 
@@ -33,6 +35,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICustomizationRepository, CustomizationRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<JwtService>();
 
 var app = builder.Build();
 

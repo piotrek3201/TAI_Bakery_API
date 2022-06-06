@@ -328,6 +328,9 @@ namespace WebApp.Migrations
                     b.Property<decimal>("OrderValue")
                         .HasColumnType("numeric");
 
+                    b.Property<bool>("SelfPickUp")
+                        .HasColumnType("boolean");
+
                     b.HasKey("OrderId");
 
                     b.ToTable("Orders");
@@ -342,10 +345,11 @@ namespace WebApp.Migrations
                             CustomerName = "Piotr Kałuziński",
                             CustomerPhone = "+48501171851",
                             CustomerPostalCode = "00-213",
-                            Date = new DateTime(2022, 5, 19, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5673),
-                            DeliveryDate = new DateTime(2022, 5, 21, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5675),
+                            Date = new DateTime(2022, 6, 6, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3656),
+                            DeliveryDate = new DateTime(2022, 6, 8, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3657),
                             IsFinished = false,
-                            OrderValue = 50m
+                            OrderValue = 50m,
+                            SelfPickUp = false
                         },
                         new
                         {
@@ -356,10 +360,11 @@ namespace WebApp.Migrations
                             CustomerName = "Jan Kowalski",
                             CustomerPhone = "+48501355704",
                             CustomerPostalCode = "02-137",
-                            Date = new DateTime(2022, 5, 19, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5680),
-                            DeliveryDate = new DateTime(2022, 5, 23, 21, 2, 46, 751, DateTimeKind.Local).AddTicks(5681),
+                            Date = new DateTime(2022, 6, 6, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3668),
+                            DeliveryDate = new DateTime(2022, 6, 10, 20, 16, 12, 805, DateTimeKind.Local).AddTicks(3669),
                             IsFinished = false,
-                            OrderValue = 20m
+                            OrderValue = 20m,
+                            SelfPickUp = false
                         });
                 });
 
@@ -550,6 +555,37 @@ namespace WebApp.Migrations
                             SizeId = 3L,
                             Diameter = 45
                         });
+                });
+
+            modelBuilder.Entity("WebApp.Model.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WebApp.Model.Customization", b =>

@@ -36,6 +36,8 @@ namespace WebApp.Model
         public decimal OrderValue { get; set; }
         [Required]
         public bool IsFinished { get; set; } = false;
+        [Required]
+        public bool SelfPickUp { get; set; } = false;
 
         //navigation property for EF Core:
         //[JsonIgnore]

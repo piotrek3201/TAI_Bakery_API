@@ -27,6 +27,8 @@ namespace WebApp.Data
         public DbSet<Filling> Fillings { get; set; }
         public DbSet<Glaze> Glazes { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO: relationships
@@ -315,7 +317,10 @@ namespace WebApp.Data
                 }
             );
 
-            
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Email).IsUnique();
+            });
         }
     }
 }
