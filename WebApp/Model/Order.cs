@@ -19,13 +19,10 @@ namespace WebApp.Model
         [MaxLength(16)]
         [Phone]
         public string CustomerPhone { get; set; } = string.Empty;
-        [Required]
         [MaxLength(100)]
         public string CustomerAddress { get; set; } = string.Empty;
-        [Required]
         [MaxLength(30)]
         public string CustomerCity { get; set; } = string.Empty;
-        [Required]
         [MaxLength(10)]
         public string CustomerPostalCode { get; set; } = string.Empty;
         [Required]

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApp.Data;
@@ -11,9 +12,10 @@ using WebApp.Data;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220606233209_Heroku")]
+    partial class Heroku
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -345,8 +347,8 @@ namespace WebApp.Migrations
                             CustomerName = "Piotr Kałuziński",
                             CustomerPhone = "+48501171851",
                             CustomerPostalCode = "00-213",
-                            Date = new DateTime(2022, 6, 9, 18, 48, 34, 327, DateTimeKind.Local).AddTicks(5587),
-                            DeliveryDate = new DateTime(2022, 6, 11, 18, 48, 34, 327, DateTimeKind.Local).AddTicks(5589),
+                            Date = new DateTime(2022, 6, 7, 1, 32, 8, 990, DateTimeKind.Local).AddTicks(2744),
+                            DeliveryDate = new DateTime(2022, 6, 9, 1, 32, 8, 990, DateTimeKind.Local).AddTicks(2745),
                             IsFinished = false,
                             OrderValue = 50m,
                             SelfPickUp = false
@@ -360,8 +362,8 @@ namespace WebApp.Migrations
                             CustomerName = "Jan Kowalski",
                             CustomerPhone = "+48501355704",
                             CustomerPostalCode = "02-137",
-                            Date = new DateTime(2022, 6, 9, 18, 48, 34, 327, DateTimeKind.Local).AddTicks(5594),
-                            DeliveryDate = new DateTime(2022, 6, 13, 18, 48, 34, 327, DateTimeKind.Local).AddTicks(5595),
+                            Date = new DateTime(2022, 6, 7, 1, 32, 8, 990, DateTimeKind.Local).AddTicks(2750),
+                            DeliveryDate = new DateTime(2022, 6, 11, 1, 32, 8, 990, DateTimeKind.Local).AddTicks(2752),
                             IsFinished = false,
                             OrderValue = 20m,
                             SelfPickUp = false
