@@ -88,6 +88,7 @@ namespace WebApp.Data
                             {
                                 var customizationMaxId = await db.Customizations.MaxAsync(x => x.CustomizationId);
                                 orderDetail.CustomizationId = customizationMaxId + 1;
+                                orderDetail.Customization.CustomizationId = customizationMaxId + 1; //???
                                 await db.Customizations.AddAsync(orderDetail.Customization);
                             }
                         }
