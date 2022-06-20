@@ -14,7 +14,7 @@ namespace WebApp.Data
 
         public async Task<List<Order>> GetAllOrdersAsync()
         {
-            return await db.Orders.ToListAsync();
+            return await db.Orders.OrderByDescending(x => x.DeliveryDate).ToListAsync();
         }
 
         public async Task<List<OrderDetail>> GetOrderDetailsAsync(long orderId)
