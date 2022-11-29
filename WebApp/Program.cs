@@ -10,7 +10,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORSPolicy", builder =>
     {
+        /*
         builder.WithOrigins("http://localhost:3000")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+        */
+        builder.WithOrigins("https://proud-hill-04c363403.2.azurestaticapps.net/")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
@@ -22,11 +28,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+/*
 var dbConfig = builder.Configuration.GetSection("TAI_Bakery").Get<Settings>();
 var connectionString = dbConfig.ConnectionString;
 
 builder.Services.AddDbContext<AppDBContext>(
     options => options.UseNpgsql(connectionString)
+);
+*/
+
+builder.Services.AddDbContext<AppDBContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("TAI_BakeryDb"))
 );
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -40,12 +52,17 @@ builder.Services.AddScoped<JwtService>();
 
 var app = builder.Build();
 
+
+app.UseSwagger();
+app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
+/*
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+*/
 
 app.UseHttpsRedirection();
 
