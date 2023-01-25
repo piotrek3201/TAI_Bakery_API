@@ -10,16 +10,18 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORSPolicy", builder =>
     {
-        /*
+        
         builder.WithOrigins("http://localhost:3000")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
-        */
+        
+        /*
         builder.WithOrigins("https://proud-hill-04c363403.2.azurestaticapps.net/")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
+        */
     });
 });
 
