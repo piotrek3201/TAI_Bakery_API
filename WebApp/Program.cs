@@ -10,18 +10,15 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORSPolicy", builder =>
     {
-        
-        builder.WithOrigins("http://localhost:3000")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-        
         /*
-        builder.WithOrigins("https://proud-hill-04c363403.2.azurestaticapps.net/")
+        builder.WithOrigins("https://tai-bakery.herokuapp.com/", "http://localhost:3000")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
         */
+        builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
     });
 });
 
@@ -57,14 +54,13 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
 // Configure the HTTP request pipeline.
-/*
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-*/
 
 app.UseHttpsRedirection();
 
@@ -74,5 +70,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
+if (app.Environment.IsProduction())
+{
+    var port = Environment.GetEnvironmentVariable("PORT");
+    app.Urls.Add($"http://*:{port}");
+}
 
 app.Run();

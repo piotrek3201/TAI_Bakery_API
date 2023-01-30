@@ -47,14 +47,17 @@ namespace WebApp.Controllers
 
             var jwt = jwtService.Generate(user.Id);
 
+            /*
             Response.Cookies.Append("jwt", jwt, new CookieOptions
             {
                 HttpOnly = true
             });
+            */
 
             return Ok(new
             {
-                message = "success"
+                message = "success",
+                token = jwt
             });
         }
 
@@ -63,7 +66,9 @@ namespace WebApp.Controllers
         {
             try
             {
-                var jwt = Request.Cookies["jwt"];
+                var bearer = Request.Headers["Authorization"];
+
+                var jwt = bearer.ToString().Substring("Bearer ".Length).Trim(); ;
 
                 var token = jwtService.Verify(jwt);
 
@@ -82,7 +87,7 @@ namespace WebApp.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jwt");
+            //Response.Cookies.Delete("jwt");
 
             return Ok(new { message = "success" });
         }
